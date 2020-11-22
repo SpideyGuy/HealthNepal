@@ -1,6 +1,7 @@
 package org.samriddhi.healthnepal;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +16,18 @@ public class LoginActivity extends AppCompatActivity {
 
     TextView register;
 
+    SharedPreferences sharedPreferences;
+
+    SharedPreferences.Editor editor;
+
+    final String PREFERENCES_NAME = "user_data";
+    final String USER_EMAIL = "user_email";
+    final String USER_PASSWORD = "user_password";
+
+    final String IS_LOGGED_IN = "logged_in";
+
+    String stringEmail, stringPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,12 +39,21 @@ public class LoginActivity extends AppCompatActivity {
 
         register = (TextView) findViewById(R.id.tv_register);
 
+        sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
+
+        editor = sharedPreferences.edit();
+
+        stringEmail = sharedPreferences.getString(USER_EMAIL, "");
+        stringPassword = sharedPreferences.getString(USER_PASSWORD, "");
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(email.getText().toString()
-                        .equalsIgnoreCase("admin@healthnepal.com") &&
-                        password.getText().toString().equals("admin")){
+                        .equalsIgnoreCase(stringEmail) &&
+                        password.getText().toString().equals(stringPassword)){
+                    editor.putBoolean(IS_LOGGED_IN, true);
+                    editor.commit();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
