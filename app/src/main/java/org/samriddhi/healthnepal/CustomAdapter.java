@@ -42,28 +42,41 @@ class CustomAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        CountryViewHolder countryViewHolder;
+
         if(convertView == null){
             convertView = LayoutInflater.from(mContext)
                     .inflate(R.layout.row_country, parent,false);
+            countryViewHolder = new CountryViewHolder();
+            countryViewHolder.countryFlag = (ImageView) convertView.findViewById(R.id.country_flag);
+            countryViewHolder.countryName = (TextView) convertView.findViewById(R.id.country_name);
+            countryViewHolder.countryPopulation = (TextView) convertView.findViewById(R.id.country_population);
+            countryViewHolder.countryGDP = (TextView) convertView.findViewById(R.id.country_gdp);
+            countryViewHolder.countryIndependence = (TextView) convertView.findViewById(R.id.country_independence);
+
+            convertView.setTag(countryViewHolder);
+
+        }
+        else{
+            countryViewHolder = (CountryViewHolder) convertView.getTag();
         }
 
         CountryModel countryModel = getItem(position);
 
-        ImageView countryFlag = (ImageView) convertView.findViewById(R.id.country_flag);
+        Picasso.get().load(countryModel.getCountryFlag()).into(countryViewHolder.countryFlag);
 
-        TextView countryName = (TextView) convertView.findViewById(R.id.country_name);
-        TextView countryPopulation = (TextView) convertView.findViewById(R.id.country_population);
-        TextView countryGDP = (TextView) convertView.findViewById(R.id.country_gdp);
-        TextView countryIndependence = (TextView) convertView.findViewById(R.id.country_independence);
-
-        Picasso.get().load(countryModel.getCountryFlag()).into(countryFlag);
-
-        countryName.setText("Country Name: " + countryModel.getName());
-        countryPopulation.setText("Country Population: " + countryModel.getPopulation());
-        countryGDP.setText("Country GDP: " + countryModel.getGDP());
-        countryIndependence.setText("Independence: " + countryModel.getIndependenceSince());
+        countryViewHolder.countryName.setText("Country Name: " + countryModel.getName());
+        countryViewHolder.countryPopulation.setText("Country Population: " + countryModel.getPopulation());
+        countryViewHolder.countryGDP.setText("Country GDP: " + countryModel.getGDP());
+        countryViewHolder.countryIndependence.setText("Independence: " + countryModel.getIndependenceSince());
 
         return convertView;
 
     }
+
+    static class CountryViewHolder {
+        ImageView countryFlag;
+        TextView countryName, countryPopulation, countryGDP, countryIndependence;
+    }
+
 }

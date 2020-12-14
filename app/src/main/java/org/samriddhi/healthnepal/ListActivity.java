@@ -2,8 +2,11 @@ package org.samriddhi.healthnepal;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -49,6 +52,25 @@ public class ListActivity extends AppCompatActivity {
         customAdapter = new CustomAdapter(countryData, ListActivity.this);
 
         lvData.setAdapter(customAdapter);
+
+
+        lvData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                CountryModel countryModel = (CountryModel) adapterView.getItemAtPosition(position);
+                Toast.makeText(ListActivity.this,countryModel.getPopulation(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+//        lvData.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                CountryModel countryModel = (CountryModel) adapterView.getItemAtPosition(i);
+//                Toast.makeText(ListActivity.this, countryModel.getName(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
     }
 }
